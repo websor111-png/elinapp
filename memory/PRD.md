@@ -35,6 +35,8 @@
 - MaskingPanel with intensity slider and 5 technique toggles
 - Playback controls (play/pause, seek, volume)
 - Export dialog with MP3/WAV format selection
+- **PWA Support**: manifest.json, service worker, app icons, install prompt - users can install from Chrome/Edge
+- **Electron Desktop Setup**: Complete configuration in /app/electron/ with main.js, preload.js, package.json, build scripts for Windows .exe, README cu instructiuni
 
 ## Testing Results
 - Backend: 100% (11/11 API endpoints passing)

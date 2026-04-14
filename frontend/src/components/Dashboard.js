@@ -9,7 +9,7 @@ import WaveformCanvas from './WaveformCanvas';
 import SectionEditor from './SectionEditor';
 import PlaybackBar from './PlaybackBar';
 import ExportDialog from './ExportDialog';
-import { Waveform, Disc, FolderPlus, ShieldCheck } from '@phosphor-icons/react';
+import { Waveform, Disc, FolderPlus, ShieldCheck, DesktopTower } from '@phosphor-icons/react';
 import MaskingPanel from './MaskingPanel';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -46,6 +46,7 @@ const Dashboard = () => {
   const [mode, setMode] = useState('restructure');
   const [collageSections, setCollageSections] = useState([]);
   const [showExport, setShowExport] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState(null);
 
   const audioRef = useRef(null);
 
@@ -71,6 +72,15 @@ const Dashboard = () => {
     fetchTracks();
     fetchProjects();
   }, [fetchTracks, fetchProjects]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -270,6 +280,16 @@ const Dashboard = () => {
     }
   };
 
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const result = await installPrompt.userChoice;
+    if (result.outcome === 'accepted') {
+      setInstallPrompt(null);
+      toast.success('App installed on desktop!');
+    }
+  };
+
   const currentWaveform = selectedTrack?.waveform || selectedProject?.waveform || [];
   const currentName = selectedTrack?.original_name || selectedProject?.name || '';
   const currentDuration = selectedTrack?.duration || selectedProject?.duration || duration;
@@ -283,6 +303,18 @@ const Dashboard = () => {
           <span className="text-xs text-slate-500 font-['IBM_Plex_Mono'] uppercase tracking-[0.2em] hidden sm:inline">
             Audio Masking & Restructure
           </span>
+        </div>
+        <div className="flex items-center gap-2">
+          {installPrompt && (
+            <Button
+              onClick={handleInstall}
+              variant="outline"
+              className="border-violet-300 hover:bg-violet-100 rounded-sm text-xs font-medium text-violet-600 h-8"
+              data-testid="install-desktop-btn"
+            >
+              <DesktopTower size={14} className="mr-1.5" /> Instaleaza pe Desktop
+            </Button>
+          )}
         </div>
       </header>
 

@@ -1,0 +1,30 @@
+{
+  "short_name": "MusicMask",
+  "name": "Elyn MusicMasking",
+  "description": "Audio restructuring and AI masking application - Modify song structure and evade AI detection",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "landscape",
+  "theme_color": "#7c3aed",
+  "background_color": "#f5f3ff",
+  "categories": ["music", "utilities", "productivity"]
+}

@@ -1,0 +1,63 @@
+{
+  "name": "elyn-musicmasking",
+  "version": "1.0.0",
+  "description": "Elyn MusicMasking - Audio Restructuring & AI Masking Desktop App",
+  "main": "main.js",
+  "author": "Elyn",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "NODE_ENV=development electron .",
+    "build:win": "electron-builder --win --x64",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.elyn.musicmasking",
+    "productName": "Elyn MusicMasking",
+    "copyright": "Copyright 2026 Elyn",
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "assets/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icon-512.png",
+      "artifactName": "ElynMusicMasking-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Elyn MusicMasking",
+      "installerIcon": "assets/icon-512.png",
+      "uninstallerIcon": "assets/icon-512.png",
+      "installerHeaderIcon": "assets/icon-512.png"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon-512.png",
+      "category": "public.app-category.music"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon-512.png",
+      "category": "AudioVideo"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}
