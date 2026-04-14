@@ -4,13 +4,14 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-class SoundForgeAPITester:
+class ElynMusicMaskingAPITester:
     def __init__(self, base_url="https://song-restructure.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
         self.uploaded_track_id = None
         self.project_id = None
+        self.masked_project_id = None
 
     def run_test(self, name, method, endpoint, expected_status, data=None, files=None):
         """Run a single API test"""
@@ -265,6 +266,37 @@ class SoundForgeAPITester:
             self.tests_run += 1
             return False
 
+    def test_mask_audio(self):
+        """Test AI masking functionality"""
+        if not self.uploaded_track_id:
+            print("❌ No track ID available for testing")
+            return False
+
+        mask_data = {
+            "track_id": self.uploaded_track_id,
+            "intensity": 75,
+            "pitch_shift": True,
+            "speed_change": True,
+            "eq_modify": True,
+            "reverb": True,
+            "noise": True,
+            "name": "Test AI Masked Track"
+        }
+        
+        success, response = self.run_test(
+            "AI Mask Audio",
+            "POST",
+            "mask",
+            200,
+            data=mask_data
+        )
+        
+        if success and 'id' in response:
+            self.masked_project_id = response['id']
+            print(f"   Created masked project ID: {self.masked_project_id}")
+            print(f"   Project type: {response.get('type', 'unknown')}")
+        return success
+
     def test_delete_track(self):
         """Test deleting a track (run last)"""
         if not self.uploaded_track_id:
@@ -280,10 +312,10 @@ class SoundForgeAPITester:
         return success
 
 def main():
-    print("🎵 SoundForge API Testing Suite")
+    print("🎵 Elyn MusicMasking API Testing Suite")
     print("=" * 50)
     
-    tester = SoundForgeAPITester()
+    tester = ElynMusicMaskingAPITester()
     
     # Run all tests in order
     tests = [
@@ -293,6 +325,7 @@ def main():
         tester.test_get_track,
         tester.test_analyze_track,
         tester.test_restructure_audio,
+        tester.test_mask_audio,
         tester.test_list_projects,
         tester.test_get_project,
         tester.test_export_audio,

@@ -44,10 +44,10 @@ const ExportDialog = ({ open, onClose, trackId, projectId }) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-zinc-950 border border-zinc-800 rounded-none max-w-sm">
+      <DialogContent className="bg-white border border-violet-200 rounded-sm max-w-sm">
         <DialogHeader>
           <DialogTitle className="text-white font-['Outfit']">Export Audio</DialogTitle>
-          <DialogDescription className="text-zinc-500 font-['IBM_Plex_Mono'] text-xs">
+          <DialogDescription className="text-slate-500 font-['IBM_Plex_Mono'] text-xs">
             Choose format and download
           </DialogDescription>
         </DialogHeader>
@@ -60,8 +60,8 @@ const ExportDialog = ({ open, onClose, trackId, projectId }) => {
                 onClick={() => setFormat(f)}
                 className={`flex-1 p-3 border text-center uppercase font-['IBM_Plex_Mono'] text-sm transition-colors duration-150 ${
                   format === f
-                    ? 'border-yellow-400 bg-yellow-400/10 text-yellow-400'
-                    : 'border-zinc-800 text-zinc-500 hover:border-zinc-600'
+                    ? 'border-violet-500 bg-violet-600/10 text-violet-600'
+                    : 'border-violet-200 text-slate-500 hover:border-violet-400'
                 }`}
                 data-testid={`export-format-${f}`}
               >
@@ -71,7 +71,7 @@ const ExportDialog = ({ open, onClose, trackId, projectId }) => {
             ))}
           </div>
 
-          <div className="text-xs text-zinc-600 font-['IBM_Plex_Mono']">
+          <div className="text-xs text-slate-400 font-['IBM_Plex_Mono']">
             {format === 'mp3'
               ? 'MP3 320kbps - Compressed - Smaller file'
               : 'WAV - Uncompressed - Full quality'}
@@ -80,7 +80,7 @@ const ExportDialog = ({ open, onClose, trackId, projectId }) => {
           <Button
             onClick={handleExport}
             disabled={isExporting || (!trackId && !projectId)}
-            className="w-full bg-yellow-400 text-black hover:bg-yellow-300 rounded-none font-medium"
+            className="w-full bg-violet-600 text-white hover:bg-violet-500 rounded-sm font-medium"
             data-testid="export-download-btn"
           >
             <DownloadSimple size={16} className="mr-2" />

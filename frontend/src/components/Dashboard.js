@@ -9,7 +9,8 @@ import WaveformCanvas from './WaveformCanvas';
 import SectionEditor from './SectionEditor';
 import PlaybackBar from './PlaybackBar';
 import ExportDialog from './ExportDialog';
-import { Waveform, Disc, FolderPlus } from '@phosphor-icons/react';
+import { Waveform, Disc, FolderPlus, ShieldCheck } from '@phosphor-icons/react';
+import MaskingPanel from './MaskingPanel';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -202,6 +203,20 @@ const Dashboard = () => {
     }
   };
 
+  const handleMask = async (maskOptions) => {
+    setIsProcessing(true);
+    try {
+      const res = await axios.post(`${API}/mask`, maskOptions);
+      toast.success('AI Masking applied!');
+      await fetchProjects();
+      handleSelectProject(res.data);
+    } catch (e) {
+      toast.error(e.response?.data?.detail || 'Masking failed');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const addToCollage = (track, section) => {
     setCollageSections(prev => [...prev, {
       ...section,
@@ -260,20 +275,20 @@ const Dashboard = () => {
   const currentDuration = selectedTrack?.duration || selectedProject?.duration || duration;
 
   return (
-    <div className="h-screen flex flex-col bg-zinc-950 text-white font-['Outfit']" data-testid="dashboard">
-      <header className="flex items-center justify-between px-6 py-3 border-b border-zinc-800 bg-zinc-950 flex-shrink-0">
+    <div className="h-screen flex flex-col bg-gradient-to-br from-violet-50 via-blue-50 to-sky-50 text-slate-900 font-['Outfit']" data-testid="dashboard">
+      <header className="flex items-center justify-between px-6 py-3 border-b border-violet-200 bg-white/80 backdrop-blur-sm flex-shrink-0">
         <div className="flex items-center gap-3">
-          <Waveform size={28} weight="duotone" className="text-yellow-400" />
-          <h1 className="text-xl font-bold tracking-tight">SoundForge</h1>
-          <span className="text-xs text-zinc-500 font-['IBM_Plex_Mono'] uppercase tracking-[0.2em] hidden sm:inline">
-            Audio Restructure
+          <Waveform size={28} weight="duotone" className="text-violet-600" />
+          <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-violet-600 to-blue-500 bg-clip-text text-transparent">Elyn MusicMasking</h1>
+          <span className="text-xs text-slate-500 font-['IBM_Plex_Mono'] uppercase tracking-[0.2em] hidden sm:inline">
+            Audio Masking & Restructure
           </span>
         </div>
       </header>
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
-        <aside className="col-span-1 lg:col-span-3 border-r border-zinc-800 flex flex-col overflow-hidden">
-          <div className="p-4 border-b border-zinc-800">
+        <aside className="col-span-1 lg:col-span-3 border-r border-violet-200 bg-white/60 backdrop-blur-sm flex flex-col overflow-hidden">
+          <div className="p-4 border-b border-violet-200">
             <UploadZone onUpload={handleUpload} isUploading={isUploading} />
           </div>
           <div className="flex-1 overflow-y-auto">
@@ -305,20 +320,27 @@ const Dashboard = () => {
 
               <div className="flex-1 overflow-y-auto px-4 pb-2">
                 <Tabs value={mode} onValueChange={setMode}>
-                  <TabsList className="bg-zinc-900 border border-zinc-800 rounded-none h-9">
+                  <TabsList className="bg-violet-50 border border-violet-200 rounded-sm h-9">
                     <TabsTrigger
                       value="restructure"
-                      className="rounded-none data-[state=active]:bg-yellow-400 data-[state=active]:text-black text-xs font-medium"
+                      className="rounded-sm data-[state=active]:bg-violet-600 data-[state=active]:text-white text-xs font-medium"
                       data-testid="tab-restructure"
                     >
                       <Waveform size={14} className="mr-1.5" /> Restructure
                     </TabsTrigger>
                     <TabsTrigger
                       value="collage"
-                      className="rounded-none data-[state=active]:bg-yellow-400 data-[state=active]:text-black text-xs font-medium"
+                      className="rounded-sm data-[state=active]:bg-violet-600 data-[state=active]:text-white text-xs font-medium"
                       data-testid="tab-collage"
                     >
                       <FolderPlus size={14} className="mr-1.5" /> Collage
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="masking"
+                      className="rounded-sm data-[state=active]:bg-violet-600 data-[state=active]:text-white text-xs font-medium"
+                      data-testid="tab-masking"
+                    >
+                      <ShieldCheck size={14} className="mr-1.5" /> AI Masking
                     </TabsTrigger>
                   </TabsList>
 
@@ -337,20 +359,20 @@ const Dashboard = () => {
 
                   <TabsContent value="collage" className="mt-3">
                     <div className="space-y-3">
-                      <p className="text-xs text-zinc-500 font-['IBM_Plex_Mono'] uppercase tracking-[0.2em]">
+                      <p className="text-xs text-slate-500 font-['IBM_Plex_Mono'] uppercase tracking-[0.2em]">
                         Select sections from analyzed tracks
                       </p>
 
                       <div className="space-y-2">
                         {tracks.filter(t => t.analyzed && t.sections?.length > 0).map(track => (
-                          <div key={track.id} className="border border-zinc-800 p-3">
+                          <div key={track.id} className="border border-violet-200 p-3">
                             <p className="text-sm font-medium mb-2 truncate">{track.original_name}</p>
                             <div className="flex flex-wrap gap-1">
                               {track.sections.map(section => (
                                 <button
                                   key={section.id}
                                   onClick={() => addToCollage(track, section)}
-                                  className={`px-2 py-1 text-xs font-['IBM_Plex_Mono'] uppercase ${SECTION_COLORS_BG[section.label] || 'bg-zinc-700 hover:bg-zinc-600'} text-white transition-colors duration-150`}
+                                  className={`px-2 py-1 text-xs font-['IBM_Plex_Mono'] uppercase ${SECTION_COLORS_BG[section.label] || 'bg-slate-400 hover:bg-slate-300'} text-white transition-colors duration-150`}
                                   data-testid={`collage-add-${section.id}`}
                                 >
                                   + {section.label} ({(section.end_time - section.start_time).toFixed(0)}s)
@@ -361,23 +383,23 @@ const Dashboard = () => {
                         ))}
 
                         {tracks.filter(t => t.analyzed).length === 0 && (
-                          <p className="text-zinc-500 text-sm font-['IBM_Plex_Mono']">
+                          <p className="text-slate-500 text-sm font-['IBM_Plex_Mono']">
                             Analyze some tracks first to use collage mode.
                           </p>
                         )}
                       </div>
 
                       {collageSections.length > 0 && (
-                        <div className="border border-zinc-800 p-3">
+                        <div className="border border-violet-200 p-3">
                           <div className="flex items-center justify-between mb-2">
-                            <p className="text-xs text-zinc-500 font-['IBM_Plex_Mono'] uppercase tracking-[0.2em]">
+                            <p className="text-xs text-slate-500 font-['IBM_Plex_Mono'] uppercase tracking-[0.2em]">
                               Collage Timeline
                             </p>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => setCollageSections([])}
-                              className="text-zinc-500 hover:text-white rounded-none text-xs h-6 px-2"
+                              className="text-slate-500 hover:text-slate-900 rounded-sm text-xs h-6 px-2"
                               data-testid="collage-clear"
                             >
                               Clear
@@ -387,7 +409,7 @@ const Dashboard = () => {
                             {collageSections.map((s, i) => (
                               <div
                                 key={i}
-                                className={`px-2 py-1 text-xs font-['IBM_Plex_Mono'] ${SECTION_COLORS_STATIC[s.label] || 'bg-zinc-700'} text-white flex items-center gap-1`}
+                                className={`px-2 py-1 text-xs font-['IBM_Plex_Mono'] ${SECTION_COLORS_STATIC[s.label] || 'bg-slate-400'} text-white flex items-center gap-1`}
                               >
                                 <span className="truncate max-w-[80px]">{s.track_name?.split('.')[0]}</span>
                                 <span className="opacity-70">/ {s.label}</span>
@@ -403,7 +425,7 @@ const Dashboard = () => {
                           <Button
                             onClick={handleCreateCollage}
                             disabled={isProcessing || collageSections.length < 2}
-                            className="mt-3 bg-yellow-400 text-black hover:bg-yellow-300 rounded-none font-medium text-sm"
+                            className="mt-3 bg-violet-600 text-white hover:bg-violet-500 rounded-sm font-medium text-sm"
                             data-testid="create-collage-btn"
                           >
                             {isProcessing ? 'Creating...' : 'Create Collage'}
@@ -411,6 +433,15 @@ const Dashboard = () => {
                         </div>
                       )}
                     </div>
+                  </TabsContent>
+
+                  <TabsContent value="masking" className="mt-3">
+                    <MaskingPanel
+                      trackId={selectedTrack?.id}
+                      trackName={selectedTrack?.original_name}
+                      isProcessing={isProcessing}
+                      onMask={handleMask}
+                    />
                   </TabsContent>
                 </Tabs>
               </div>
@@ -430,7 +461,7 @@ const Dashboard = () => {
           ) : (
             <div className="flex-1 flex items-center justify-center relative">
               <div
-                className="absolute inset-0 opacity-[0.03]"
+                className="absolute inset-0 opacity-[0.06]"
                 style={{
                   backgroundImage: 'url(https://images.pexels.com/photos/9404662/pexels-photo-9404662.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940)',
                   backgroundSize: 'cover',
@@ -438,11 +469,11 @@ const Dashboard = () => {
                 }}
               />
               <div className="text-center z-10">
-                <Disc size={64} weight="duotone" className="text-zinc-700 mx-auto mb-4" />
-                <h2 className="text-2xl font-light text-zinc-500 tracking-tight" data-testid="empty-state-title">
+                <Disc size={64} weight="duotone" className="text-slate-300 mx-auto mb-4" />
+                <h2 className="text-2xl font-light text-slate-500 tracking-tight" data-testid="empty-state-title">
                   No track selected
                 </h2>
-                <p className="text-zinc-600 text-sm mt-2 font-['IBM_Plex_Mono']">
+                <p className="text-slate-400 text-sm mt-2 font-['IBM_Plex_Mono']">
                   Upload a track or select one from the library
                 </p>
               </div>

@@ -31,11 +31,11 @@ const WaveformCanvas = ({ peaks, sections, currentTime, duration, onSeek }) => {
     const height = rect.height;
 
     // Background
-    ctx.fillStyle = '#18181b';
+    ctx.fillStyle = '#f1f5f9';
     ctx.fillRect(0, 0, width, height);
 
     // Grid lines
-    ctx.strokeStyle = '#27272a44';
+    ctx.strokeStyle = '#c4b5fd22';
     ctx.lineWidth = 1;
     for (let x = 0; x < width; x += 80) {
       ctx.beginPath();
@@ -53,7 +53,7 @@ const WaveformCanvas = ({ peaks, sections, currentTime, duration, onSeek }) => {
     // Time markers
     if (duration > 0) {
       ctx.font = '9px "IBM Plex Mono", monospace';
-      ctx.fillStyle = '#52525b';
+      ctx.fillStyle = '#94a3b8';
       ctx.textAlign = 'center';
       const interval = duration > 120 ? 30 : duration > 60 ? 15 : 10;
       for (let t = 0; t <= duration; t += interval) {
@@ -76,9 +76,9 @@ const WaveformCanvas = ({ peaks, sections, currentTime, duration, onSeek }) => {
       if (duration > 0 && sections.length > 0) {
         const timeAtBar = (i / peaks.length) * duration;
         const section = sections.find(s => timeAtBar >= s.start_time && timeAtBar < s.end_time);
-        ctx.fillStyle = section ? (SECTION_COLORS[section.label] || '#facc15') : '#52525b';
+        ctx.fillStyle = section ? (SECTION_COLORS[section.label] || '#7c3aed') : '#94a3b8';
       } else {
-        ctx.fillStyle = '#52525b';
+        ctx.fillStyle = '#94a3b8';
       }
 
       ctx.fillRect(x, centerY - barHeight / 2, barWidth, barHeight);
@@ -92,7 +92,7 @@ const WaveformCanvas = ({ peaks, sections, currentTime, duration, onSeek }) => {
         const midX = (startX + endX) / 2;
 
         // Boundary line
-        ctx.strokeStyle = '#3f3f4699';
+        ctx.strokeStyle = '#c4b5fd55';
         ctx.lineWidth = 1;
         ctx.setLineDash([3, 3]);
         ctx.beginPath();
@@ -107,10 +107,10 @@ const WaveformCanvas = ({ peaks, sections, currentTime, duration, onSeek }) => {
         const textWidth = ctx.measureText(label).width + 10;
         const pillHeight = 16;
 
-        ctx.fillStyle = SECTION_COLORS[section.label] || '#facc15';
+        ctx.fillStyle = SECTION_COLORS[section.label] || '#7c3aed';
         ctx.fillRect(midX - textWidth / 2, 4, textWidth, pillHeight);
 
-        ctx.fillStyle = '#000';
+        ctx.fillStyle = '#1e293b';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(label, midX, 4 + pillHeight / 2);
@@ -122,15 +122,15 @@ const WaveformCanvas = ({ peaks, sections, currentTime, duration, onSeek }) => {
       const playheadX = (currentTime / duration) * width;
 
       ctx.save();
-      ctx.shadowColor = 'rgba(250, 204, 21, 0.5)';
+      ctx.shadowColor = 'rgba(124, 58, 237, 0.4)';
       ctx.shadowBlur = 10;
-      ctx.fillStyle = '#facc15';
+      ctx.fillStyle = '#7c3aed';
       ctx.fillRect(playheadX - 1, 0, 2, height);
       ctx.restore();
 
       // Playhead time
       ctx.font = '10px "IBM Plex Mono", monospace';
-      ctx.fillStyle = '#facc15';
+      ctx.fillStyle = '#7c3aed';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
       const mins = Math.floor(currentTime / 60);

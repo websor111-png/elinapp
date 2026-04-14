@@ -201,6 +201,108 @@ def create_collage(track_sections: list, crossfade_ms: int = 300) -> dict:
     }
 
 
+def mask_audio_for_ai(audio_path: str, options: dict) -> dict:
+    """Apply audio masking techniques to evade AI fingerprint detection."""
+    from scipy.signal import butter, sosfilt
+
+    audio = AudioSegment.from_file(audio_path)
+    intensity = options.get('intensity', 50)
+    scale = intensity / 100.0
+
+    # 1. Pitch shift (0.5-2.5 semitones)
+    if options.get('pitch_shift', True):
+        semitones = 0.5 + scale * 2.0
+        pitch_factor = 2 ** (semitones / 12)
+        audio = audio._spawn(audio.raw_data, overrides={
+            "frame_rate": int(audio.frame_rate * pitch_factor)
+        }).set_frame_rate(audio.frame_rate)
+
+    # 2. Speed change (0.99x - 1.03x)
+    if options.get('speed_change', True):
+        speed = 1.0 + (scale * 0.04 - 0.01)
+        audio = audio._spawn(audio.raw_data, overrides={
+            "frame_rate": int(audio.frame_rate * speed)
+        }).set_frame_rate(audio.frame_rate)
+
+    # 3. EQ modification (bass boost + treble cut)
+    if options.get('eq_modify', True):
+        samples = np.array(audio.get_array_of_samples(), dtype=np.float64)
+        sr = audio.frame_rate
+        ch = audio.channels
+        sw = audio.sample_width
+        boost = 1 + scale * 3
+
+        if ch == 2:
+            samples = samples.reshape((-1, 2))
+            for c in range(2):
+                channel = samples[:, c].copy()
+                sos_low = butter(2, 250, btype='low', fs=sr, output='sos')
+                low = sosfilt(sos_low, channel)
+                sos_high = butter(2, 8000, btype='high', fs=sr, output='sos')
+                high = sosfilt(sos_high, channel)
+                samples[:, c] = channel + low * (boost / 10) - high * (boost / 20)
+            samples = samples.flatten()
+        else:
+            sos_low = butter(2, 250, btype='low', fs=sr, output='sos')
+            low = sosfilt(sos_low, samples)
+            sos_high = butter(2, 8000, btype='high', fs=sr, output='sos')
+            high = sosfilt(sos_high, samples)
+            samples = samples + low * (boost / 10) - high * (boost / 20)
+
+        max_val = 2 ** (sw * 8 - 1) - 1
+        samples = np.clip(samples, -max_val, max_val).astype(np.int16)
+        audio = AudioSegment(
+            data=samples.tobytes(),
+            sample_width=sw,
+            frame_rate=sr,
+            channels=ch
+        )
+
+    # 4. Add subtle noise
+    if options.get('noise', True):
+        samples = np.array(audio.get_array_of_samples(), dtype=np.float64)
+        max_amp = np.max(np.abs(samples)) if len(samples) > 0 else 1.0
+        noise_level = (0.001 + scale * 0.004) * max_amp
+        noise_signal = np.random.normal(0, noise_level, samples.shape)
+        samples = samples + noise_signal
+        max_val = 2 ** (audio.sample_width * 8 - 1) - 1
+        samples = np.clip(samples, -max_val, max_val).astype(np.int16)
+        audio = AudioSegment(
+            data=samples.tobytes(),
+            sample_width=audio.sample_width,
+            frame_rate=audio.frame_rate,
+            channels=audio.channels
+        )
+
+    # 5. Micro reverb (echo)
+    if options.get('reverb', True):
+        delay_ms = int(25 + scale * 45)
+        echo_gain = -14 - (1 - scale) * 6
+        echo = audio.apply_gain(echo_gain)
+        silence = AudioSegment.silent(duration=delay_ms, frame_rate=audio.frame_rate)
+        echo = silence + echo
+        echo = echo[:len(audio)]
+        if len(echo) < len(audio):
+            echo = echo + AudioSegment.silent(
+                duration=len(audio) - len(echo),
+                frame_rate=audio.frame_rate
+            )
+        audio = audio.overlay(echo)
+
+    audio = audio.normalize()
+
+    output_filename = f"masked_{uuid.uuid4().hex[:8]}.mp3"
+    output_path = str(PROCESSED_DIR / output_filename)
+    audio.export(output_path, format="mp3", bitrate="192k")
+
+    waveform_data = extract_waveform(output_path)
+    return {
+        'filename': output_filename,
+        'duration': waveform_data['duration'],
+        'waveform': waveform_data['peaks']
+    }
+
+
 def export_track(audio_path: str, fmt: str = "mp3") -> str:
     audio = AudioSegment.from_file(audio_path)
     output_filename = f"export_{uuid.uuid4().hex[:8]}.{fmt}"

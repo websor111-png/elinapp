@@ -15,12 +15,12 @@ function App() {
         position="bottom-right"
         toastOptions={{
           style: {
-            background: '#18181b',
-            border: '1px solid #27272a',
-            color: '#fafafa',
+            background: '#ffffff',
+            border: '1px solid #ddd6fe',
+            color: '#1e293b',
             fontFamily: 'IBM Plex Mono, monospace',
             fontSize: '12px',
-            borderRadius: '0',
+            borderRadius: '0.375rem',
           },
         }}
       />

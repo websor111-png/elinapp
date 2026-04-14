@@ -14,7 +14,8 @@ import asyncio
 
 from audio_utils import (
     extract_waveform, detect_sections, restructure_audio,
-    create_collage, export_track, ensure_dirs, UPLOAD_DIR, PROCESSED_DIR
+    create_collage, export_track, mask_audio_for_ai,
+    ensure_dirs, UPLOAD_DIR, PROCESSED_DIR
 )
 
 ROOT_DIR = Path(__file__).parent
@@ -56,10 +57,21 @@ class ExportRequest(BaseModel):
     format: str = "mp3"
 
 
+class MaskRequest(BaseModel):
+    track_id: str
+    intensity: int = 50
+    pitch_shift: bool = True
+    speed_change: bool = True
+    eq_modify: bool = True
+    reverb: bool = True
+    noise: bool = True
+    name: Optional[str] = None
+
+
 # Endpoints
 @api_router.get("/")
 async def root():
-    return {"message": "SoundForge API"}
+    return {"message": "Elyn MusicMasking API"}
 
 
 @api_router.post("/tracks/upload")
@@ -309,6 +321,49 @@ async def export_audio(req: ExportRequest):
         raise HTTPException(500, f"Export error: {str(e)}")
 
     return {"filename": output_filename, "download_url": f"/api/audio/{output_filename}"}
+
+
+@api_router.post("/mask")
+async def mask_track(req: MaskRequest):
+    track = await db.tracks.find_one({"id": req.track_id}, {"_id": 0})
+    if not track:
+        raise HTTPException(404, "Track not found")
+
+    file_path = UPLOAD_DIR / track['filename']
+    if not file_path.exists():
+        raise HTTPException(404, "Audio file not found")
+
+    options = {
+        'intensity': req.intensity,
+        'pitch_shift': req.pitch_shift,
+        'speed_change': req.speed_change,
+        'eq_modify': req.eq_modify,
+        'reverb': req.reverb,
+        'noise': req.noise,
+    }
+
+    try:
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(None, mask_audio_for_ai, str(file_path), options)
+    except Exception as e:
+        raise HTTPException(500, f"Masking error: {str(e)}")
+
+    project_id = str(uuid.uuid4())
+    project_doc = {
+        'id': project_id,
+        'name': req.name or f"Masked - {track['original_name']}",
+        'type': 'masked',
+        'source_track_ids': [req.track_id],
+        'output_filename': result['filename'],
+        'duration': result['duration'],
+        'waveform': result['waveform'],
+        'created_at': datetime.now(timezone.utc).isoformat()
+    }
+
+    await db.projects.insert_one(project_doc)
+    project_doc.pop('_id', None)
+
+    return project_doc
 
 
 # Include router

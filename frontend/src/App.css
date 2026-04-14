@@ -1,6 +1,6 @@
 .App {
     min-height: 100vh;
-    background-color: hsl(240, 6%, 4%);
+    background-color: hsl(250, 100%, 98%);
 }
 
 ::-webkit-scrollbar {
@@ -9,27 +9,27 @@
 }
 
 ::-webkit-scrollbar-track {
-    background: #18181b;
+    background: #f8fafc;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #3f3f46;
+    background: #c4b5fd;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #52525b;
+    background: #a78bfa;
 }
 
 /* Slider track override for dark theme */
 [data-radix-slider-track] {
-    background: #27272a !important;
+    background: #ddd6fe !important;
 }
 
 [data-radix-slider-range] {
-    background: #facc15 !important;
+    background: #7c3aed !important;
 }
 
 [data-radix-slider-thumb] {
-    background: #facc15 !important;
-    border-color: #facc15 !important;
+    background: #7c3aed !important;
+    border-color: #7c3aed !important;
 }

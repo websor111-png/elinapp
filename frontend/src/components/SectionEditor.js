@@ -38,7 +38,7 @@ const SectionEditor = ({
 
   if (!trackSelected) {
     return (
-      <div className="text-center py-8 text-zinc-600 text-sm font-['IBM_Plex_Mono']" data-testid="section-editor-empty">
+      <div className="text-center py-8 text-slate-400 text-sm font-['IBM_Plex_Mono']" data-testid="section-editor-empty">
         Select a track to edit its structure
       </div>
     );
@@ -50,7 +50,7 @@ const SectionEditor = ({
         <Button
           onClick={onAnalyze}
           disabled={isAnalyzing}
-          className="bg-yellow-400 text-black hover:bg-yellow-300 rounded-none font-medium text-sm h-8"
+          className="bg-violet-600 text-white hover:bg-violet-500 rounded-sm font-medium text-sm h-8"
           data-testid="analyze-btn"
         >
           <MagnifyingGlass size={14} className="mr-1.5" />
@@ -62,7 +62,7 @@ const SectionEditor = ({
             onClick={onRestructure}
             disabled={isProcessing}
             variant="outline"
-            className="border-zinc-700 hover:bg-zinc-800 rounded-none font-medium text-sm h-8"
+            className="border-violet-300 hover:bg-violet-100 rounded-sm font-medium text-sm h-8"
             data-testid="restructure-btn"
           >
             <Shuffle size={14} className="mr-1.5" />
@@ -81,7 +81,7 @@ const SectionEditor = ({
               <Reorder.Item
                 key={section.id}
                 value={section}
-                className={`flex items-center gap-3 p-2.5 border ${style.border} ${style.bg} ${style.text} cursor-grab active:cursor-grabbing active:opacity-80 active:ring-2 active:ring-yellow-400 transition-all duration-150`}
+                className={`flex items-center gap-3 p-2.5 border ${style.border} ${style.bg} ${style.text} cursor-grab active:cursor-grabbing active:opacity-80 active:ring-2 active:ring-violet-500 transition-all duration-150`}
                 data-testid={`section-block-${section.id}`}
               >
                 <DotsSixVertical size={16} weight="bold" className="opacity-60 flex-shrink-0" />
@@ -122,11 +122,11 @@ const SectionEditor = ({
           })}
         </Reorder.Group>
       ) : trackAnalyzed ? (
-        <p className="text-zinc-500 text-sm font-['IBM_Plex_Mono']" data-testid="no-sections-msg">
+        <p className="text-slate-500 text-sm font-['IBM_Plex_Mono']" data-testid="no-sections-msg">
           No sections detected. Try re-analyzing.
         </p>
       ) : (
-        <p className="text-zinc-500 text-sm font-['IBM_Plex_Mono']" data-testid="analyze-prompt">
+        <p className="text-slate-500 text-sm font-['IBM_Plex_Mono']" data-testid="analyze-prompt">
           Click "Analyze Structure" to detect song sections.
         </p>
       )}

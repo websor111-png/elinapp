@@ -32,7 +32,7 @@ const UploadZone = ({ onUpload, isUploading }) => {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       className={`border border-dashed ${
-        isDragging ? 'border-yellow-400 bg-yellow-400/5' : 'border-zinc-700 hover:border-zinc-500'
+        isDragging ? 'border-violet-500 bg-violet-600/5' : 'border-violet-300 hover:border-violet-400'
       } p-6 text-center cursor-pointer transition-colors duration-150`}
       data-testid="upload-zone"
     >
@@ -46,16 +46,16 @@ const UploadZone = ({ onUpload, isUploading }) => {
       />
       {isUploading ? (
         <div className="flex flex-col items-center gap-2">
-          <div className="w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin" />
-          <span className="text-xs text-zinc-400 font-['IBM_Plex_Mono']">Uploading...</span>
+          <div className="w-6 h-6 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
+          <span className="text-xs text-slate-400 font-['IBM_Plex_Mono']">Uploading...</span>
         </div>
       ) : (
         <div className="flex flex-col items-center gap-2">
-          <UploadSimple size={24} className="text-zinc-500" />
-          <span className="text-xs text-zinc-400 font-['IBM_Plex_Mono']">
+          <UploadSimple size={24} className="text-slate-500" />
+          <span className="text-xs text-slate-400 font-['IBM_Plex_Mono']">
             Drop audio file or click to upload
           </span>
-          <span className="text-xs text-zinc-600 font-['IBM_Plex_Mono']">MP3, WAV, OGG, FLAC</span>
+          <span className="text-xs text-slate-400 font-['IBM_Plex_Mono']">MP3, WAV, OGG, FLAC</span>
         </div>
       )}
     </div>
