@@ -22,7 +22,7 @@ const PlaybackBar = ({
 }) => {
   return (
     <div
-      className="border-t border-zinc-800 bg-zinc-950 px-4 py-3 flex items-center gap-4 flex-shrink-0"
+      className="border-t border-zinc-800 bg-zinc-950 px-4 py-3 flex items-center gap-4 flex-shrink-0 relative z-50"
       data-testid="playback-bar"
     >
       <Button
