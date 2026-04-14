@@ -1,34 +1,35 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
-}
-
-.App-header {
-    background-color: #0f0f10;
+.App {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+    background-color: hsl(240, 6%, 4%);
 }
 
-.App-link {
-    color: #61dafb;
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+::-webkit-scrollbar-track {
+    background: #18181b;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
+}
+
+/* Slider track override for dark theme */
+[data-radix-slider-track] {
+    background: #27272a !important;
+}
+
+[data-radix-slider-range] {
+    background: #facc15 !important;
+}
+
+[data-radix-slider-thumb] {
+    background: #facc15 !important;
+    border-color: #facc15 !important;
 }
