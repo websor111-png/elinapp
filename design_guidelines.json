@@ -1,0 +1,125 @@
+{
+  "theme": "DARK",
+  "archetype": "Archetype 7: Electric & Neon (Adapted for Technical Audio Tool)",
+  "vibe": "Synthetic, energetic, highly functional, precise command-center",
+  "typography": {
+    "headings": {
+      "font_family": "Outfit, sans-serif",
+      "strategy": "Wide Display Sans, tech-forward, high contrast weights",
+      "weights": "font-light to font-black",
+      "tracking": "tracking-tight"
+    },
+    "body": {
+      "font_family": "IBM Plex Mono, monospace",
+      "strategy": "Sterile Mono Body for timecodes, structural data, and technical UI elements",
+      "tracking": "tracking-normal"
+    },
+    "scale": {
+      "h1": "text-4xl sm:text-5xl",
+      "h2": "text-2xl sm:text-3xl",
+      "h3": "text-xl sm:text-2xl",
+      "h4": "text-lg sm:text-xl",
+      "body": "text-base",
+      "small_labels": "text-xs uppercase tracking-[0.2em]"
+    }
+  },
+  "colors": {
+    "background": {
+      "primary": "bg-zinc-950",
+      "secondary": "bg-zinc-900",
+      "tertiary": "bg-black"
+    },
+    "text": {
+      "primary": "text-white",
+      "secondary": "text-zinc-400",
+      "muted": "text-zinc-500",
+      "inverse": "text-black"
+    },
+    "border": {
+      "default": "border-zinc-800",
+      "subtle": "border-zinc-800/50",
+      "highlight": "border-zinc-700"
+    },
+    "accents": {
+      "primary": "text-yellow-400 bg-yellow-400",
+      "play_head": "bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.5)]",
+      "structural_blocks": {
+        "intro": "bg-pink-500 text-pink-50",
+        "verse": "bg-cyan-500 text-cyan-50",
+        "chorus": "bg-green-500 text-green-50",
+        "bridge": "bg-purple-500 text-purple-50",
+        "outro": "bg-orange-500 text-orange-50"
+      },
+      "hover_states": {
+        "primary": "hover:bg-yellow-300",
+        "secondary": "hover:bg-zinc-800 hover:text-white"
+      }
+    }
+  },
+  "layout_and_spacing": {
+    "strategy": "The 'Control Room' Grid",
+    "base_grid": "grid-cols-1 lg:grid-cols-12",
+    "gaps": "gap-4 md:gap-6",
+    "padding_scale": "p-4 p-6 p-8",
+    "components": {
+      "sidebar": "col-span-1 lg:col-span-3",
+      "main_workspace": "col-span-1 lg:col-span-9 flex flex-col gap-6",
+      "timeline_container": "w-full overflow-x-auto relative min-h-[300px] border border-zinc-800 bg-zinc-900/50 rounded-none",
+      "track_row": "h-32 border-b border-zinc-800/50 relative flex items-center"
+    },
+    "borders_and_radii": {
+      "radius": "rounded-none",
+      "style": "Retro-Futurism / Technical Grid borders. 1px solid strokes, exposed grid skeletons."
+    }
+  },
+  "surfaces_and_effects": {
+    "header": "Solid Background (bg-zinc-950) with hard bottom border (border-zinc-800). No glassmorphism to preserve high-contrast data readability.",
+    "cards_and_panels": "Flat backgrounds, 1px subtle border (border-zinc-800), no drop shadows. Focus on pure 2D data clarity.",
+    "interactive_blocks": "Song structural blocks should have slight inner shadows or 1px bright borders to appear 'grabbable' for drag & drop.",
+    "hover_effects": "Slight lift (-translate-y-[1px]) or border brightness increase. Do not rely on soft shadows."
+  },
+  "components_instructions": {
+    "buttons": "Use Shadcn Button. Override radius to rounded-none. Primary buttons use bg-yellow-400 text-black hover:bg-yellow-300. Secondary use border-zinc-800 hover:bg-zinc-800.",
+    "inputs_and_forms": "Use Shadcn Input/Slider. Override to dark mode specifics (bg-zinc-900 border-zinc-800). Sliders for volume/playback should use accent-yellow-400.",
+    "icons": "Use @phosphor-icons/react (Weight: regular or duotone for active states). It fits dense dashboards well.",
+    "waveform_visualizer": "Do not use generic Shadcn cards for the timeline. Build custom HTML/Tailwind layered divs. Background: repeating linear gradients for timecode markers. Foreground: draggable colored blocks representing song segments.",
+    "modals_dialogs": "Use Shadcn Dialog for the Export/Restructure settings. Dark backdrop (bg-black/80), strict border on modal (border-zinc-800)."
+  },
+  "motion_and_interactions": {
+    "hover": "Instant or very fast transitions (duration-150) to feel highly responsive.",
+    "drag_and_drop": "While dragging, the song block should have opacity-80 and a bright 2px outline (ring-2 ring-yellow-400).",
+    "playback": "The playhead must transition smoothly using framer-motion or CSS transforms (translate-x) to visualize real-time audio progress."
+  },
+  "media_and_assets": {
+    "image_urls": [
+      {
+        "category": "empty_state_background",
+        "description": "Abstract fluid neon lines on dark background. Use selectively with opacity-20 inside empty drop zones or empty timeline.",
+        "url": "https://images.pexels.com/photos/9404662/pexels-photo-9404662.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "category": "placeholder_album_art",
+        "description": "Dark aesthetic DJ controller closeup for default album art before upload.",
+        "url": "https://images.unsplash.com/photo-1550520115-e9b95e845e4c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHwyfHxkaiUyMGNvbnRyb2xsZXIlMjBkYXJrfGVufDB8fHx8MTc3NjE3MTMzMHww&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "category": "user_avatar",
+        "description": "Silhouette profile portrait for user account dropdown.",
+        "url": "https://images.unsplash.com/photo-1762287929145-b09f2610cd6f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNTl8MHwxfHNlYXJjaHwyfHxtdXNpYyUyMHByb2R1Y2VyJTIwcG9ydHJhaXQlMjBkYXJrfGVufDB8fHx8MTc3NjE3MTMxOXww&ixlib=rb-4.1.0&q=85"
+      }
+    ]
+  },
+  "testing_and_accessibility": {
+    "contrast": "Ensure all text on neon structural blocks is highly readable (e.g., text-black on yellow/green blocks, text-white on deep pink/purple).",
+    "data_testid": "Mandatory on all play controls, track rows, upload zones, export buttons, and structural blocks.",
+    "aria": "Add aria-labels to all icon-only buttons (Play, Pause, Skip, Loop)."
+  },
+  "instructions_to_main_agent": [
+    "Install required dependencies: yarn add @phosphor-icons/react framer-motion",
+    "Configure Tailwind for Dark mode by default and add the custom font families (Outfit, IBM Plex Mono).",
+    "Build the dashboard strictly following the 'Control Room' Grid layout. Left panel for library/uploads, main wide area for the multi-track timeline.",
+    "Create the 'Structural Blocks' (Intro, Verse, Chorus) as distinct visually colored units using the accents palette provided. These blocks must be visually draggable.",
+    "For the waveform, mock the visualizer with dense, repeating vertical bars or use a canvas library if explicitly required by audio processing logic, but prioritize UI layout first.",
+    "Use pure sharp rectangles (rounded-none) and visible 1px borders (border-zinc-800) for all containers. Do not use standard rounded cards or soft shadows."
+  ]
+}
