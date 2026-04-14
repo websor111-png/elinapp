@@ -1,19 +1,16 @@
-# SoundForge - Audio Restructuring App PRD
+# Elyn MusicMasking - Audio Restructuring & AI Masking App PRD
 
 ## Original Problem Statement
-"Poti cre o aplicatie de pc care sa: Schimbe complet structura unei melodii sau a unui colaj de melodii, dar sa pastreze aceeasi perceptie auditiva?"
-
-Build a web application that can completely change the structure of a song or collage of songs while maintaining the same auditory perception.
+1. Redenumire aplicatie: Elyn MusicMasking
+2. Tema deschisa pe culori violet, albastru si bleo
+3. Sectiune pentru masking audio TikTok AI
+4. Aplicatie pentru PC Windows (limitat de platforma web, PWA disponibil)
 
 ## Architecture
 - **Backend**: FastAPI + MongoDB + pydub/scipy/numpy for audio processing
 - **Frontend**: React + Tailwind CSS + Shadcn UI + Phosphor Icons + Framer Motion
-- **Audio Processing**: Energy-based section detection, crossfade restructuring, volume normalization
-
-## User Personas
-- Music producers wanting to experiment with song structure
-- DJs creating mashups and collages
-- Content creators needing restructured background music
+- **Audio Processing**: Energy-based section detection, crossfade restructuring, AI fingerprint masking
+- **Theme**: Light violet/blue/sky gradient
 
 ## Core Requirements
 - Upload MP3/WAV audio files
@@ -21,50 +18,30 @@ Build a web application that can completely change the structure of a song or co
 - Drag & drop section reordering
 - Automatic restructuring with crossfade transitions
 - Multi-song collage creation
+- TikTok AI Masking (pitch shift, speed change, EQ, reverb, noise)
 - Waveform visualization with colored sections
 - Audio playback controls
 - Export to MP3/WAV formats
 
 ## What's Been Implemented (Feb 2026)
-- Full backend API (upload, analyze, restructure, collage, export, audio serving)
-- Audio processing pipeline (waveform extraction, energy-based section detection, restructuring, collage creation)
-- Dark theme "Control Room" grid dashboard
+- Full backend API (upload, analyze, restructure, collage, mask, export, audio serving) - 11 endpoints
+- AI Masking pipeline: pitch shift, speed change, EQ modification, micro reverb, noise layer
+- Light violet/blue/sky theme with gradient backgrounds
 - Upload zone with drag & drop
 - Track library sidebar with project list
 - Canvas-based waveform visualization with colored sections
-- Section editor with drag & drop reordering via Framer Motion
+- Section editor with drag & drop via Framer Motion
+- 3 tabs: Restructure, Collage, AI Masking
+- MaskingPanel with intensity slider and 5 technique toggles
 - Playback controls (play/pause, seek, volume)
 - Export dialog with MP3/WAV format selection
-- Collage mode for combining sections from multiple tracks
 
 ## Testing Results
-- Backend: 100% (10/10 API endpoints passing)
-- Frontend: 95% (11/12 features working)
-
-## Prioritized Backlog
-### P0 (Critical) - Done
-- [x] Audio upload and storage
-- [x] Waveform extraction and visualization
-- [x] Section detection algorithm
-- [x] Audio restructuring with crossfade
-- [x] Export functionality
-
-### P1 (Important) - Future
-- [ ] More sophisticated section detection (MFCC-based, self-similarity matrix)
-- [ ] Tempo/key detection and matching
-- [ ] Real-time waveform playback sync (requestAnimationFrame)
-- [ ] Drag sections directly on waveform
-
-### P2 (Nice to have) - Future
-- [ ] Reverb tails at section boundaries
-- [ ] Beat-aligned section boundaries
-- [ ] Undo/redo for section reordering
-- [ ] Audio effects (EQ, compression)
-- [ ] YouTube link import
-- [ ] Multi-user collaboration
+- Backend: 100% (11/11 API endpoints passing)
+- Frontend: 94% (16/17 features working)
 
 ## Next Tasks
-1. Improve section detection with spectral features
-2. Add beat-sync for more precise section boundaries
-3. Implement pitch/tempo shifting to better match sections
-4. Add audio effects pipeline
+1. PWA support for desktop-like experience on Windows
+2. Improve section detection with MFCC spectral features
+3. Add beat-sync for precise section boundaries
+4. Audio effects pipeline (additional EQ presets, compression)
